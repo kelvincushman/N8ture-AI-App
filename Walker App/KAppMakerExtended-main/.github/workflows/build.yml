@@ -1,0 +1,62 @@
+name: Building Application
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: Android
+            build_command: ./gradlew assembleDebug
+            artifact_path: composeApp/build/outputs/apk/debug/**.apk
+            artifact_name: android-debug-apk
+            upload_artifact: true
+          - os: macos-latest
+            platform: iOS
+            build_command: |
+              gem install cocoapods
+              cd iosApp
+              pod install --repo-update
+              xcodebuild \
+                -workspace iosApp.xcworkspace \
+                -configuration Debug \
+                -scheme iosApp \
+                -destination 'platform=iOS Simulator,name=iPhone 14' CODE_SIGNING_ALLOWED='NO'
+            upload_artifact: false
+    runs-on: ${{ matrix.os }}
+    name: Build ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-gradle
+        with:
+          gradle-cache-encryption-key: ${{ secrets.GRADLE_CACHE_ENCRYPTION_KEY }}
+
+      - name: Write secrets to local.properties
+        run: |
+          echo "GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}" >> "local.properties"
+          echo "REVENUECAT_ANDROID_API_KEY=${{ secrets.REVENUECAT_ANDROID_API_KEY }}" >> "local.properties"
+          echo "REVENUECAT_IOS_API_KEY=${{ secrets.REVENUECAT_IOS_API_KEY }}" >> "local.properties"
+
+      - name: Build ${{ matrix.platform }} App
+        run: ${{ matrix.build_command }}
+
+      - name: Upload ${{ matrix.platform }} Artifact
+        if: ${{ matrix.upload_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          retention-days: 7
+          path: ${{ matrix.artifact_path }}

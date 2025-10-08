@@ -1,0 +1,246 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "4916f7f58a3af2ea295d7415aad84b43",
+    "entities": [
+      {
+        "tableName": "example",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "species",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `commonName` TEXT NOT NULL, `scientificName` TEXT NOT NULL, `family` TEXT NOT NULL, `category` TEXT NOT NULL, `description` TEXT NOT NULL, `detailedDescription` TEXT, `habitat` TEXT NOT NULL, `edibility` TEXT NOT NULL, `edibilityDetails` TEXT, `herbalBenefits` TEXT, `safetyWarning` TEXT, `conservationStatus` TEXT, `seasonalAvailability` TEXT, `preparationMethods` TEXT, `imageUrls` TEXT NOT NULL, `similarSpeciesIds` TEXT NOT NULL, `isPremiumContent` INTEGER NOT NULL, `cachedAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "commonName",
+            "columnName": "commonName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scientificName",
+            "columnName": "scientificName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "family",
+            "columnName": "family",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "detailedDescription",
+            "columnName": "detailedDescription",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "habitat",
+            "columnName": "habitat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edibility",
+            "columnName": "edibility",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edibilityDetails",
+            "columnName": "edibilityDetails",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "herbalBenefits",
+            "columnName": "herbalBenefits",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "safetyWarning",
+            "columnName": "safetyWarning",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "conservationStatus",
+            "columnName": "conservationStatus",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "seasonalAvailability",
+            "columnName": "seasonalAvailability",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "preparationMethods",
+            "columnName": "preparationMethods",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "imageUrls",
+            "columnName": "imageUrls",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "similarSpeciesIds",
+            "columnName": "similarSpeciesIds",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isPremiumContent",
+            "columnName": "isPremiumContent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cachedAt",
+            "columnName": "cachedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "identification_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `timestamp` TEXT NOT NULL, `imageUri` TEXT NOT NULL, `primaryMatchSpeciesId` TEXT NOT NULL, `primaryMatchConfidence` REAL NOT NULL, `alternativeMatchesJson` TEXT NOT NULL, `category` TEXT NOT NULL, `latitude` REAL, `longitude` REAL, `locationAccuracy` REAL, `locationName` TEXT, `processingTimeMs` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `notes` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUri",
+            "columnName": "imageUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "primaryMatchSpeciesId",
+            "columnName": "primaryMatchSpeciesId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "primaryMatchConfidence",
+            "columnName": "primaryMatchConfidence",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alternativeMatchesJson",
+            "columnName": "alternativeMatchesJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "locationAccuracy",
+            "columnName": "locationAccuracy",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "locationName",
+            "columnName": "locationName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "processingTimeMs",
+            "columnName": "processingTimeMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4916f7f58a3af2ea295d7415aad84b43')"
+    ]
+  }
+}

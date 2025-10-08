@@ -1,0 +1,32 @@
+## This file must NOT be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the Android SDK
+sdk.dir=/path/to/Android/sdk
+
+## N8ture AI App Configuration
+# Google Gemini API Key - Get from https://ai.google.dev/
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Google OAuth Web Client ID - From Firebase Console
+GOOGLE_WEB_CLIENT_ID=your_web_client_id_here.apps.googleusercontent.com
+
+# RevenueCat API Keys - From RevenueCat Dashboard
+REVENUECAT_ANDROID_API_KEY=your_revenuecat_android_key
+REVENUECAT_IOS_API_KEY=your_revenuecat_ios_key
+
+# AdMob Android IDs - From AdMob Console
+ADMOB_APP_ID_ANDROID=ca-app-pub-xxxxx~xxxxx
+ADMOB_BANNER_AD_ID_ANDROID=ca-app-pub-xxxxx/xxxxx
+ADMOB_INTERSTITIAL_AD_ID_ANDROID=ca-app-pub-xxxxx/xxxxx
+ADMOB_REWARDED_AD_ID_ANDROID=ca-app-pub-xxxxx/xxxxx
+
+# AdMob iOS IDs - From AdMob Console
+ADMOB_BANNER_AD_ID_IOS=ca-app-pub-xxxxx/xxxxx
+ADMOB_INTERSTITIAL_AD_ID_IOS=ca-app-pub-xxxxx/xxxxx
+ADMOB_REWARDED_AD_ID_IOS=ca-app-pub-xxxxx/xxxxx
+
+## Development Notes:
+# - For testing, you can use Google's test ad IDs (see build.gradle.kts)
+# - RevenueCat has a free tier for testing subscriptions
+# - Gemini API has a generous free tier: https://ai.google.dev/pricing

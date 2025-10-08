@@ -1,0 +1,30 @@
+<resources>
+    <string name="bottom_nav_label_home">Home</string>
+    <string name="bottom_nav_label_profile">Profile</string>
+    <string name="bottom_nav_label_favorites">Favorites</string>
+
+    <string name="title_onboarding_page_1">Amazing Title</string>
+    <string name="desc_onboarding_page_1">Amazing Description Text will be here</string>
+
+    <string name="btn_get_started">Get Started</string>
+    <string name="btn_restore_purchase">Restore Purchase</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_delete_account">Delete Account</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <string name="title_sign_in">Sign in</string>
+    <string name="title_screen_home">Home</string>
+    <string name="title_screen_favorites">Favorites</string>
+    <string name="title_screen_account">Account</string>
+    <string name="title_screen_profile">Profile</string>
+
+    <string name="and">and</string>
+    <string name="sign_in_to">Sign in to </string>
+    <string name="txt_main_action_to_sign_in">Your account</string>
+
+    <string name="subscriptions">Subscriptions</string>
+    <string name="logout">Logout</string>
+    <string name="help_and_support">Help &amp; Support</string>
+    <string name="item_contact_support">Contact Support</string>
+</resources>
