@@ -22,6 +22,13 @@ N8ture AI App/
 └── AppStructure_PRD.md                     # API migration guide (Replicate → Gemini)
 ```
 
+## Development Environment
+
+**Primary IDE:** Android Studio
+- The developer is working in Android Studio with the repository cloned locally
+- Repository has been pulled from GitHub for local development
+- Changes should be committed and pushed from this environment
+
 ## Development Commands
 
 ### Kotlin Multiplatform App (Main Project)
