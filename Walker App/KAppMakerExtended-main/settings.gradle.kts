@@ -26,6 +26,18 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        // Mapbox Maven repository for Maps SDK
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+            credentials {
+                username = "mapbox"
+                password = providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN")
+                    .getOrElse(providers.environmentVariable("MAPBOX_DOWNLOADS_TOKEN").orNull ?: "")
+            }
+        }
     }
 }
 
