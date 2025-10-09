@@ -110,6 +110,9 @@ kotlin {
 
             // Accompanist Permissions
             implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+            // Mapbox Maps SDK for Journey Tracking
+            implementation("com.mapbox.maps:android:11.0.0")
         }
 
         iosMain.dependencies {
@@ -136,6 +139,12 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Configure Mapbox access token
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        manifestPlaceholders["MAPBOX_ACCESS_TOKEN"] =
+            properties.getProperty("MAPBOX_ACCESS_TOKEN", "")
     }
 
     val keystorePropertiesFile = rootProject.file("distribution/android/keystore/keystore.properties")
