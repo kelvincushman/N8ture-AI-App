@@ -11,9 +11,12 @@ import com.measify.kappmaker.data.source.local.entity.ExampleEntity
     entities = [
         ExampleEntity::class,
         com.measify.kappmaker.data.source.local.entity.SpeciesEntity::class,
-        com.measify.kappmaker.data.source.local.entity.IdentificationHistoryEntity::class
+        com.measify.kappmaker.data.source.local.entity.IdentificationHistoryEntity::class,
+        com.measify.kappmaker.data.source.local.entity.JourneyEntity::class,
+        com.measify.kappmaker.data.source.local.entity.DiscoveryEntity::class,
+        com.measify.kappmaker.data.source.local.entity.JourneyWaypointEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @ConstructedBy(AppDatabaseConstructor::class)
@@ -21,6 +24,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exampleDao(): ExampleDao
     abstract fun speciesDao(): com.measify.kappmaker.data.source.local.dao.SpeciesDao
     abstract fun identificationHistoryDao(): com.measify.kappmaker.data.source.local.dao.IdentificationHistoryDao
+    abstract fun journeyDao(): com.measify.kappmaker.data.source.local.dao.JourneyDao
+    abstract fun discoveryDao(): com.measify.kappmaker.data.source.local.dao.DiscoveryDao
+    abstract fun journeyWaypointDao(): com.measify.kappmaker.data.source.local.dao.JourneyWaypointDao
 }
 
 
