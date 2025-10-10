@@ -48,6 +48,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(libs.compose.material.icons)
+            implementation(compose.materialIconsExtended) // Extended icons for Journey Tracking
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -108,6 +109,9 @@ kotlin {
 
             // Accompanist Permissions
             implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+            // Google Play Services Location - For Journey Tracking GPS
+            implementation("com.google.android.gms:play-services-location:21.0.1")
 
             // Mapbox Maps SDK for Journey Tracking
             implementation("com.mapbox.maps:android:11.0.0")
