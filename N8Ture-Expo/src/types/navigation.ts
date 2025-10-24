@@ -38,14 +38,23 @@ export type RootStackParamList = {
     imageUri: string;
     imageBase64?: string;
     identificationId?: string;
+    latitude?: number;      // GPS latitude from photo capture
+    longitude?: number;     // GPS longitude from photo capture
+    accuracy?: number;      // GPS accuracy in meters
   };
   AudioResults: {
     audioUri: string;
     identificationId?: string;
+    latitude?: number;      // GPS latitude from recording location
+    longitude?: number;     // GPS longitude from recording location
   };
   SpeciesDetail: {
     speciesId: string;
     speciesName: string;
+    imageUri?: string;       // Original photo from identification
+    latitude?: number;       // GPS latitude where species was found
+    longitude?: number;      // GPS longitude where species was found
+    accuracy?: number;       // GPS accuracy in meters
   };
 
   // Walk screens

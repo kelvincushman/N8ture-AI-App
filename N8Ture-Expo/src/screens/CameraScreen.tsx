@@ -20,6 +20,7 @@ import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../constants/theme';
 import { useImageCapture, CapturedImage } from '../hooks/useImageCapture';
+import { useLocation, LocationCoordinates } from '../hooks/useLocation';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function CameraScreen() {
@@ -38,19 +39,37 @@ export default function CameraScreen() {
     captureImage,
   } = useImageCapture();
 
+  const { getCurrentLocation } = useLocation();
+
   const [capturedImage, setCapturedImage] = useState<CapturedImage | null>(null);
+  const [gpsCoordinates, setGpsCoordinates] = useState<LocationCoordinates | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
 
   /**
    * Handle photo capture
+   * Captures both image and GPS coordinates
    */
   const handleCapture = async () => {
     setIsCapturing(true);
-    const image = await captureImage(cameraRef.current);
+
+    // Capture image and GPS coordinates simultaneously
+    const [image, gps] = await Promise.all([
+      captureImage(cameraRef.current),
+      getCurrentLocation(),
+    ]);
+
     setIsCapturing(false);
 
     if (image) {
       setCapturedImage(image);
+      setGpsCoordinates(gps);
+
+      // Log GPS capture (optional, for debugging)
+      if (gps) {
+        console.log(`GPS captured: ${gps.latitude}, ${gps.longitude} (±${gps.accuracy}m)`);
+      } else {
+        console.log('GPS not available');
+      }
     }
   };
 
@@ -59,10 +78,12 @@ export default function CameraScreen() {
    */
   const handleRetake = () => {
     setCapturedImage(null);
+    setGpsCoordinates(null);
   };
 
   /**
    * Proceed to identification
+   * Passes image and GPS coordinates to Results screen
    */
   const handleIdentify = () => {
     if (!capturedImage) {
@@ -70,10 +91,13 @@ export default function CameraScreen() {
       return;
     }
 
-    // Navigate to results screen with image data
+    // Navigate to results screen with image data and GPS coordinates
     navigation.navigate('Results' as never, {
       imageUri: capturedImage.uri,
       imageBase64: capturedImage.base64,
+      latitude: gpsCoordinates?.latitude,
+      longitude: gpsCoordinates?.longitude,
+      accuracy: gpsCoordinates?.accuracy,
     } as never);
   };
 
