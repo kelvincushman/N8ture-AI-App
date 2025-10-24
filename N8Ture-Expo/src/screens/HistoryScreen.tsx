@@ -18,12 +18,12 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  SafeAreaView,
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
 import { HistoryCard } from '../components/history/HistoryCard';
+import { AppHeader } from '../components/navigation/AppHeader';
 
 const { width } = Dimensions.get('window');
 const CARD_GAP = 12;
@@ -129,12 +129,14 @@ export default function HistoryScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>History</Text>
-        {/* TODO: Implement filter/search */}
-      </View>
+    <View style={styles.container}>
+      {/* App Header with Settings & Profile */}
+      <AppHeader
+        title="History"
+        showBackButton={false}
+        showSettings={true}
+        showProfile={true}
+      />
 
       {/* Statistics Dashboard */}
       <View style={styles.statsContainer}>
@@ -175,7 +177,7 @@ export default function HistoryScreen() {
           </View>
         }
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -183,20 +185,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.primary || '#FFFFFF',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border || '#E0E0E0',
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.text.primary,
   },
   // Statistics Dashboard
   statsContainer: {

@@ -16,12 +16,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
 import { WalkIcon } from '../components/icons/WalkIcon';
+import { AppHeader } from '../components/navigation/AppHeader';
 
 export default function WalkScreen() {
   const handleStartWalk = () => {
@@ -58,11 +58,14 @@ export default function WalkScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Walks</Text>
-      </View>
+    <View style={styles.container}>
+      {/* App Header with Settings & Profile */}
+      <AppHeader
+        title="Walks"
+        showBackButton={false}
+        showSettings={true}
+        showProfile={true}
+      />
 
       <ScrollView
         style={styles.scrollView}
@@ -128,7 +131,7 @@ export default function WalkScreen() {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -136,17 +139,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.primary || '#FFFFFF',
-  },
-  header: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border || '#E0E0E0',
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontFamily: theme.fonts.bold,
-    color: theme.colors.text.primary,
   },
   scrollView: {
     flex: 1,
