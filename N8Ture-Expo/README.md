@@ -193,11 +193,13 @@ This project uses an agent-based development workflow with specialized agents:
 
 See `/agents/` directory for agent configurations.
 
-## Camera-Based Species Identification
+## Features Overview
 
-The app now features a complete camera-based species identification system!
+### Camera-Based Species Identification
 
-### Features
+Complete camera-based species identification system!
+
+**Features:**
 - ✅ Full-screen camera with expo-camera
 - ✅ Image capture with preview
 - ✅ Google Gemini Vision API integration
@@ -206,6 +208,25 @@ The app now features a complete camera-based species identification system!
 - ✅ Edibility and toxicity warnings
 - ✅ Trial system integration
 - ✅ N8ture AI branded UI
+
+### Audio Recording Infrastructure (Phase 4)
+
+Production-ready audio recording for bird song and wildlife sound identification!
+
+**Features:**
+- ✅ High-quality audio recording (up to 60 seconds)
+- ✅ Real-time waveform visualization
+- ✅ Adjustable duration presets (10s, 30s, 60s)
+- ✅ Quality presets (low, medium, high)
+- ✅ Pause/resume recording
+- ✅ Audio playback controls
+- ✅ Trial system integration
+- ✅ Firebase Storage upload support
+- ✅ Comprehensive error handling
+- ✅ Nature-inspired UI with animations
+- ✅ 100% test coverage
+
+**See [AUDIO_RECORDING_GUIDE.md](./AUDIO_RECORDING_GUIDE.md) for complete documentation.**
 
 ### Quick Start
 
@@ -230,6 +251,7 @@ The app now features a complete camera-based species identification system!
 #### Implementation Docs
 - **[FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** - Complete Firebase and Gemini setup guide
 - **[CAMERA_USAGE.md](./CAMERA_USAGE.md)** - User guide for camera feature
+- **[AUDIO_RECORDING_GUIDE.md](./AUDIO_RECORDING_GUIDE.md)** - Audio recording infrastructure guide
 - **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical implementation details
 
 #### Architecture Docs (in `/docs/react-expo/`)
@@ -261,6 +283,11 @@ The app now features a complete camera-based species identification system!
 - Camera requires physical device (won't work in web browser)
 - Check camera permissions are granted
 - See [CAMERA_USAGE.md](./CAMERA_USAGE.md) for troubleshooting
+
+**Audio recording not working:**
+- Microphone requires physical device
+- Check microphone permissions are granted
+- See [AUDIO_RECORDING_GUIDE.md](./AUDIO_RECORDING_GUIDE.md) for troubleshooting
 
 **"Firebase not initialized" error:**
 - This is normal for development without Firebase setup

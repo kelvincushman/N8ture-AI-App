@@ -96,6 +96,12 @@ export default function HomeScreen() {
     Alert.alert('History', 'History screen coming soon!');
   };
 
+  const handleOpenAudioRecording = () => {
+    // Audio recording doesn't require trial usage until identification
+    // So we can navigate directly without checking trials
+    navigation.navigate('AudioRecording' as never);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -122,6 +128,13 @@ export default function HomeScreen() {
             <Text style={styles.primaryButtonText}>
               {isRecording ? 'Processing...' : 'Open Camera'}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.audioButton}
+            onPress={handleOpenAudioRecording}
+          >
+            <Text style={styles.audioButtonText}>Record Bird Song</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -192,6 +205,19 @@ const styles = StyleSheet.create({
     ...theme.shadows.md,
   },
   primaryButtonText: {
+    ...theme.typography.button,
+    color: theme.colors.primary.contrastText,
+    textAlign: 'center',
+  },
+  audioButton: {
+    backgroundColor: theme.colors.primary.light,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.md,
+  },
+  audioButtonText: {
     ...theme.typography.button,
     color: theme.colors.primary.contrastText,
     textAlign: 'center',
