@@ -20,6 +20,7 @@ import CameraScreen from '../screens/CameraScreen';
 import AudioRecordingScreen from '../screens/AudioRecordingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import PaywallScreen from '../screens/PaywallScreen';
+import SpeciesDetailScreen from '../screens/SpeciesDetailScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabsParamList>();
@@ -163,6 +164,16 @@ export default function RootNavigator() {
             component={ResultsScreen}
             options={{
               title: 'Identification Results',
+              presentation: 'card',
+            }}
+          />
+
+          {/* Species Detail (accessed from Results or History) */}
+          <Stack.Screen
+            name="SpeciesDetail"
+            component={SpeciesDetailScreen}
+            options={{
+              headerShown: false,
               presentation: 'card',
             }}
           />
