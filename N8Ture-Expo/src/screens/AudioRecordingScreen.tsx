@@ -166,8 +166,7 @@ export default function AudioRecordingScreen() {
           {
             text: 'Upgrade Now',
             onPress: () => {
-              // TODO: Navigate to paywall
-              console.log('Navigate to paywall');
+              navigation.navigate('Paywall' as never);
             },
           },
         ]
@@ -188,8 +187,7 @@ export default function AudioRecordingScreen() {
             {
               text: 'Upgrade Now',
               onPress: () => {
-                // TODO: Navigate to paywall
-                console.log('Navigate to paywall');
+                navigation.navigate('Paywall' as never);
               },
             },
           ]

@@ -27,8 +27,7 @@ export default function TrialBadge({
 
   const handleUpgrade = () => {
     // Navigate to paywall/subscription screen
-    // TODO: Implement paywall screen navigation
-    console.log('Navigate to paywall');
+    navigation.navigate('Paywall' as never);
   };
 
   // Premium users don't need trial badge

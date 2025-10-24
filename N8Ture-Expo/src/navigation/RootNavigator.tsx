@@ -19,6 +19,7 @@ import AuthScreen from '../screens/auth/AuthScreen';
 import CameraScreen from '../screens/CameraScreen';
 import AudioRecordingScreen from '../screens/AudioRecordingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
+import PaywallScreen from '../screens/PaywallScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabsParamList>();
@@ -183,6 +184,16 @@ export default function RootNavigator() {
             options={{
               title: 'Settings',
               presentation: 'card',
+            }}
+          />
+
+          {/* Paywall (accessed when trials run out) */}
+          <Stack.Screen
+            name="Paywall"
+            component={PaywallScreen}
+            options={{
+              title: 'Premium',
+              presentation: 'modal',
             }}
           />
         </Stack.Navigator>

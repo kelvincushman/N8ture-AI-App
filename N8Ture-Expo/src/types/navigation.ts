@@ -57,6 +57,9 @@ export type RootStackParamList = {
   // Settings and profile
   Settings: undefined;
   Profile: undefined;
+
+  // Subscription
+  Paywall: undefined;
 };
 
 declare global {
