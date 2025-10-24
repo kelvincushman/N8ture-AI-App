@@ -5,115 +5,113 @@
  * Features:
  * - 2-column image grid layout
  * - Visual cards with species photos
- * - Statistics dashboard
- * - Pull to refresh
- * - Filter options
- *
- * TODO: Implement Firebase integration, real images, infinite scroll
+ * - Real data from historyService
+ * - Statistics dashboard with actual counts
+ * - Reload on screen focus
+ * - Empty state when no history
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   Dimensions,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
 import { HistoryCard } from '../components/history/HistoryCard';
 import { AppHeader } from '../components/navigation/AppHeader';
+import { historyService } from '../services/historyService';
+import { IdentificationRecord, IdentificationStats } from '../types/identification';
 
 const { width } = Dimensions.get('window');
 const CARD_GAP = 12;
 const CARD_WIDTH = (width - (theme.spacing.lg * 2) - CARD_GAP) / 2;
 
-interface HistoryItem {
-  id: string;
-  commonName: string;
-  scientificName: string;
-  date: string;
-  type: 'audio' | 'camera';
-  confidence: number;
-  imageUri?: string;
-}
-
 export default function HistoryScreen() {
-  // Mock data with more entries for grid demo
-  const mockHistory: HistoryItem[] = [
-    {
-      id: '1',
-      commonName: 'Robin',
-      scientificName: 'Erithacus rubecula',
-      date: '2 hours ago',
-      type: 'audio',
-      confidence: 0.92,
-    },
-    {
-      id: '2',
-      commonName: 'Oak Tree',
-      scientificName: 'Quercus robur',
-      date: '1 day ago',
-      type: 'camera',
-      confidence: 0.88,
-    },
-    {
-      id: '3',
-      commonName: 'Blue Tit',
-      scientificName: 'Cyanistes caeruleus',
-      date: '2 days ago',
-      type: 'audio',
-      confidence: 0.95,
-    },
-    {
-      id: '4',
-      commonName: 'Red Fox',
-      scientificName: 'Vulpes vulpes',
-      date: '3 days ago',
-      type: 'camera',
-      confidence: 0.91,
-    },
-    {
-      id: '5',
-      commonName: 'Blackbird',
-      scientificName: 'Turdus merula',
-      date: '4 days ago',
-      type: 'audio',
-      confidence: 0.87,
-    },
-    {
-      id: '6',
-      commonName: 'Chaffinch',
-      scientificName: 'Fringilla coelebs',
-      date: '5 days ago',
-      type: 'audio',
-      confidence: 0.93,
-    },
-    {
-      id: '7',
-      commonName: 'Common Daisy',
-      scientificName: 'Bellis perennis',
-      date: '1 week ago',
-      type: 'camera',
-      confidence: 0.89,
-    },
-    {
-      id: '8',
-      commonName: 'Great Tit',
-      scientificName: 'Parus major',
-      date: '1 week ago',
-      type: 'audio',
-      confidence: 0.94,
-    },
-  ];
+  const navigation = useNavigation();
 
-  const handleCardPress = (item: HistoryItem) => {
-    // TODO: Navigate to species detail screen
-    console.log('Card pressed:', item.commonName);
+  // State management
+  const [history, setHistory] = useState<IdentificationRecord[]>([]);
+  const [stats, setStats] = useState<IdentificationStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  /**
+   * Load history and statistics from historyService
+   */
+  const loadHistory = async () => {
+    try {
+      const [historyData, statsData] = await Promise.all([
+        historyService.getHistory(),
+        historyService.getStats(),
+      ]);
+
+      setHistory(historyData);
+      setStats(statsData);
+    } catch (error) {
+      console.error('Failed to load history:', error);
+    } finally {
+      setIsLoading(false);
+      setRefreshing(false);
+    }
   };
 
-  const renderHistoryCard = ({ item }: { item: HistoryItem }) => (
+  /**
+   * Reload history when screen comes into focus
+   */
+  useFocusEffect(
+    useCallback(() => {
+      loadHistory();
+    }, [])
+  );
+
+  /**
+   * Pull-to-refresh handler
+   */
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadHistory();
+  };
+
+  /**
+   * Navigate to species detail screen with GPS data
+   */
+  const handleCardPress = (item: IdentificationRecord) => {
+    navigation.navigate('SpeciesDetail' as never, {
+      speciesId: item.speciesId,
+      speciesName: item.commonName,
+      imageUri: item.imageUri,
+      latitude: item.latitude,
+      longitude: item.longitude,
+      accuracy: item.accuracy,
+    } as never);
+  };
+
+  /**
+   * Format timestamp to relative date string
+   */
+  const formatDate = (timestamp: number): string => {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(days / 7);
+
+    if (hours < 1) return 'Just now';
+    if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+    if (weeks < 4) return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+
+    return new Date(timestamp).toLocaleDateString();
+  };
+
+  const renderHistoryCard = ({ item }: { item: IdentificationRecord }) => (
     <View style={styles.cardWrapper}>
       <HistoryCard
         id={item.id}
@@ -122,11 +120,29 @@ export default function HistoryScreen() {
         scientificName={item.scientificName}
         confidence={item.confidence}
         type={item.type}
-        date={item.date}
+        date={formatDate(item.timestamp)}
         onPress={() => handleCardPress(item)}
       />
     </View>
   );
+
+  // Show loading spinner while initial data loads
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <AppHeader
+          title="History"
+          showBackButton={false}
+          showSettings={true}
+          showProfile={true}
+        />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary.main} />
+          <Text style={styles.loadingText}>Loading history...</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -141,28 +157,38 @@ export default function HistoryScreen() {
       {/* Statistics Dashboard */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>42</Text>
+          <Text style={styles.statNumber}>{stats?.total || 0}</Text>
           <Text style={styles.statLabel}>Total IDs</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>28</Text>
+          <Text style={styles.statNumber}>
+            {(stats?.plants || 0) + (stats?.wildlife || 0) + (stats?.fungi || 0) + (stats?.insects || 0)}
+          </Text>
           <Text style={styles.statLabel}>Species</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>8</Text>
-          <Text style={styles.statLabel}>Walks</Text>
+          <Text style={styles.statNumber}>{stats?.plants || 0}</Text>
+          <Text style={styles.statLabel}>Plants</Text>
         </View>
       </View>
 
       {/* Image Grid */}
       <FlatList
-        data={mockHistory}
+        data={history}
         renderItem={renderHistoryCard}
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={styles.gridContainer}
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary.main}
+            colors={[theme.colors.primary.main]}
+          />
+        }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons
@@ -245,5 +271,18 @@ const styles = StyleSheet.create({
     color: theme.colors.text.secondary,
     textAlign: 'center',
     lineHeight: 20,
+  },
+  // Loading State
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: theme.spacing.xxl * 3,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontFamily: theme.fonts.regular,
+    color: theme.colors.text.secondary,
+    marginTop: theme.spacing.md,
   },
 });
