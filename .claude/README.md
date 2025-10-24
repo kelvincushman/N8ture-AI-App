@@ -191,13 +191,13 @@ All UI implementations must follow N8ture AI branding:
 - Primary: #708C6A (Leaf Khaki)
 - Accent: #8FAF87 (Accent Green)
 - Dark: #2D3A30 (Forest Charcoal)
-- Theme: react-expo-app/src/constants/theme.ts
+- Theme: N8Ture-Expo/src/constants/theme.ts
 
 ## Documentation
 
 Main documentation locations:
 - Project README: /README.md
-- Setup Guide: /react-expo-app/SETUP_GUIDE.md
+- Setup Guide: /N8Ture-Expo/SETUP_GUIDE.md
 - API Docs: /docs/
 - Integration Guides: /docs/react-expo/
 

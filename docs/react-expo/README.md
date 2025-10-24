@@ -37,41 +37,47 @@ This section will guide you through setting up your local development environmen
    git clone https://github.com/kelvincushman/N8ture-AI-App.git
    ```
 
-2. **Navigate to the project directory:**
+2. **Navigate to the N8Ture-Expo directory:**
 
    ```bash
-   cd N8ture-AI-App
+   cd N8ture-AI-App/N8Ture-Expo
    ```
 
 3. **Install dependencies:**
 
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 
 4. **Start the development server:**
 
    ```bash
-   npx expo start
+   npm start
    ```
 
 ## Project Structure
 
-The React Expo project will be housed in a new `react-expo-app` directory at the root of the repository. The proposed structure is as follows:
+The React Expo project is housed in the `N8Ture-Expo` directory at the root of the repository. The structure is as follows:
 
 ```
-/react-expo-app
-|-- assets
-|-- components
-|-- constants
-|-- hooks
-|-- navigation
-|-- screens
-|-- services
-|-- utils
-|-- App.js
-|-- babel.config.js
+/N8Ture-Expo
+|-- src/
+|   |-- components/
+|   |-- constants/
+|   |-- hooks/
+|   |-- navigation/
+|   |-- screens/
+|   |-- services/
+|   |-- types/
+|   |-- utils/
+|   └-- config/
+|-- assets/
+|-- functions/
+|-- App.tsx
+|-- app.json
+|-- eas.json
 |-- package.json
+└-- tsconfig.json
 ```
 
 ## Development Workflow

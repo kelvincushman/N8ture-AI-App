@@ -57,7 +57,7 @@ const firebaseConfig = {
 };
 ```
 
-4. Create `.env` file in `react-expo-app/`:
+4. Create `.env` file in `N8Ture-Expo/`:
 
 ```env
 EXPO_PUBLIC_FIREBASE_API_KEY=AIza...
@@ -82,7 +82,7 @@ EXPO_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef
 ### Initialize Firebase in Project
 
 ```bash
-cd react-expo-app
+cd N8Ture-Expo
 firebase login
 firebase init functions
 ```
@@ -129,7 +129,7 @@ This will deploy:
 ## Step 6: Install React Native Dependencies
 
 ```bash
-cd react-expo-app
+cd N8Ture-Expo
 npm install firebase expo-image-manipulator
 ```
 
@@ -179,7 +179,7 @@ This starts local emulators for Functions, Firestore, and Authentication.
 
 1. Build and run the app:
    ```bash
-   cd react-expo-app
+   cd N8Ture-Expo
    npm run ios
    # or
    npm run android

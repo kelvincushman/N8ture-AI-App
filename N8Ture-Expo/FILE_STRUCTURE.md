@@ -5,7 +5,7 @@ Complete file structure for the Clerk authentication implementation.
 ## Directory Tree
 
 ```
-react-expo-app/
+N8Ture-Expo/
 ├── src/
 │   ├── components/
 │   │   ├── auth/
@@ -119,20 +119,20 @@ react-expo-app/
 
 ### Modified Files
 
-#### `/home/user/N8ture-AI-App/react-expo-app/App.tsx`
+#### `/home/user/N8ture-AI-App/N8Ture-Expo/App.tsx`
 **Changes:**
 - Added ClerkProvider wrapper
 - Configured token cache
 - Integrated environment config
 
-#### `/home/user/N8ture-AI-App/react-expo-app/src/navigation/RootNavigator.tsx`
+#### `/home/user/N8ture-AI-App/N8Ture-Expo/src/navigation/RootNavigator.tsx`
 **Changes:**
 - Added Auth and Profile screens
 - Dynamic header button (Sign In / Profile)
 - Auth state integration
 - Modal presentation for auth
 
-#### `/home/user/N8ture-AI-App/react-expo-app/src/screens/HomeScreen.tsx`
+#### `/home/user/N8ture-AI-App/N8Ture-Expo/src/screens/HomeScreen.tsx`
 **Changes:**
 - Trial badge display
 - Authentication checks

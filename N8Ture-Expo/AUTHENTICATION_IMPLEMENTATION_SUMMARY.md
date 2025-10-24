@@ -27,19 +27,19 @@ Complete implementation of Clerk authentication system for N8ture AI React Nativ
 ## Files Modified
 
 ### Core App Files
-- `/home/user/N8ture-AI-App/react-expo-app/App.tsx`
+- `/home/user/N8ture-AI-App/N8Ture-Expo/App.tsx`
   - Added ClerkProvider wrapper
   - Configured token cache
   - Integrated environment config
 
 ### Navigation
-- `/home/user/N8ture-AI-App/react-expo-app/src/navigation/RootNavigator.tsx`
+- `/home/user/N8ture-AI-App/N8Ture-Expo/src/navigation/RootNavigator.tsx`
   - Added Auth and Profile screens
   - Added dynamic header button (Sign In / Profile)
   - Integrated auth state
 
 ### Screens
-- `/home/user/N8ture-AI-App/react-expo-app/src/screens/HomeScreen.tsx`
+- `/home/user/N8ture-AI-App/N8Ture-Expo/src/screens/HomeScreen.tsx`
   - Added trial badge display
   - Integrated authentication checks
   - Added identification recording
@@ -309,7 +309,7 @@ Track key events:
 
 ## Documentation
 
-- [AUTHENTICATION_GUIDE.md](/home/user/N8ture-AI-App/react-expo-app/AUTHENTICATION_GUIDE.md) - Complete usage guide
+- [AUTHENTICATION_GUIDE.md](/home/user/N8ture-AI-App/N8Ture-Expo/AUTHENTICATION_GUIDE.md) - Complete usage guide
 - [BRANDING_DESIGN_SYSTEM.md](/home/user/N8ture-AI-App/docs/react-expo/BRANDING_DESIGN_SYSTEM.md) - Design system reference
 
 ## Support Resources

@@ -30,10 +30,10 @@ A complete Clerk authentication system has been implemented for the N8ture AI Re
 11. `/src/components/auth/` & `/src/components/trial/` - New directories
 
 ### Files Modified: 4
-1. `/home/user/N8ture-AI-App/react-expo-app/App.tsx` - Added ClerkProvider
-2. `/home/user/N8ture-AI-App/react-expo-app/src/navigation/RootNavigator.tsx` - Added routes
-3. `/home/user/N8ture-AI-App/react-expo-app/src/screens/HomeScreen.tsx` - Added trial integration
-4. `/home/user/N8ture-AI-App/react-expo-app/package.json` - Added dependencies
+1. `/home/user/N8ture-AI-App/N8Ture-Expo/App.tsx` - Added ClerkProvider
+2. `/home/user/N8ture-AI-App/N8Ture-Expo/src/navigation/RootNavigator.tsx` - Added routes
+3. `/home/user/N8ture-AI-App/N8Ture-Expo/src/screens/HomeScreen.tsx` - Added trial integration
+4. `/home/user/N8ture-AI-App/N8Ture-Expo/package.json` - Added dependencies
 
 ### Documentation Created: 4
 1. `AUTHENTICATION_GUIDE.md` - Complete usage guide (8.7 KB)

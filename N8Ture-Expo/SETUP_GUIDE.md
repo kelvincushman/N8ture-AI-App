@@ -41,7 +41,7 @@ Step-by-step guide to set up the N8ture AI React Native Expo app.
 
 ```bash
 git clone https://github.com/kelvincushman/N8ture-AI-App.git
-cd N8ture-AI-App/react-expo-app
+cd N8ture-AI-App/N8Ture-Expo
 ```
 
 ### 2. Install Dependencies

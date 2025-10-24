@@ -266,7 +266,7 @@ October 24, 2025
 
 1. **Install Dependencies**
    ```bash
-   cd react-expo-app
+   cd N8Ture-Expo
    npm install --legacy-peer-deps
    ```
 

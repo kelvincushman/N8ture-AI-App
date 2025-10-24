@@ -38,7 +38,7 @@ Wildlife, plant, and fungi identification powered by AI. Built with React Native
 
    ```bash
    git clone https://github.com/kelvincushman/N8ture-AI-App.git
-   cd N8ture-AI-App/react-expo-app
+   cd N8ture-AI-App/N8Ture-Expo
    ```
 
 2. **Install dependencies:**
@@ -76,7 +76,7 @@ Wildlife, plant, and fungi identification powered by AI. Built with React Native
 ### Project Structure
 
 ```
-react-expo-app/
+N8Ture-Expo/
 ├── src/
 │   ├── components/      # Reusable UI components
 │   ├── screens/         # Screen components

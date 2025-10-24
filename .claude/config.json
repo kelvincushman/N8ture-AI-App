@@ -54,8 +54,8 @@
     "ai_service": "Google Gemini API",
     "authentication": "Clerk",
     "main_directories": [
-      "react-expo-app/src",
-      "react-expo-app/functions",
+      "N8Ture-Expo/src",
+      "N8Ture-Expo/functions",
       "docs",
       "agents",
       "skills"
@@ -65,11 +65,11 @@
     "primary_color": "#708C6A",
     "accent_color": "#8FAF87",
     "dark_color": "#2D3A30",
-    "theme_file": "react-expo-app/src/constants/theme.ts"
+    "theme_file": "N8Ture-Expo/src/constants/theme.ts"
   },
   "documentation": {
     "main_readme": "README.md",
-    "setup_guide": "react-expo-app/SETUP_GUIDE.md",
+    "setup_guide": "N8Ture-Expo/SETUP_GUIDE.md",
     "api_docs": "docs/",
     "changelog": "CHANGELOG.md"
   }
