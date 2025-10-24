@@ -10,6 +10,7 @@
  * - Confidence badge - top right
  * - Species name overlay - bottom
  * - Date overlay - bottom
+ * - GPS coordinates - bottom (if available)
  * - 4:5 aspect ratio (portrait)
  */
 
@@ -33,6 +34,9 @@ interface HistoryCardProps {
   confidence: number; // 0.0 - 1.0
   type: 'camera' | 'audio';
   date: string;
+  latitude?: number;
+  longitude?: number;
+  accuracy?: number;
   onPress?: () => void;
 }
 
@@ -43,6 +47,9 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
   confidence,
   type,
   date,
+  latitude,
+  longitude,
+  accuracy,
   onPress,
 }) => {
   // Get confidence color
@@ -113,6 +120,22 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
           </Text>
           {/* Date */}
           <Text style={styles.date}>{date}</Text>
+
+          {/* GPS Coordinates (if available) */}
+          {latitude !== undefined && longitude !== undefined && (
+            <View style={styles.gpsContainer}>
+              <Ionicons
+                name="location"
+                size={10}
+                color="rgba(255, 255, 255, 0.8)"
+                style={styles.gpsIcon}
+              />
+              <Text style={styles.gpsText} numberOfLines={1}>
+                {latitude.toFixed(4)}°, {longitude.toFixed(4)}°
+                {accuracy && ` (±${accuracy.toFixed(0)}m)`}
+              </Text>
+            </View>
+          )}
         </LinearGradient>
       </View>
     </TouchableOpacity>
@@ -197,5 +220,18 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: theme.fonts.regular,
     color: 'rgba(255, 255, 255, 0.8)',
+  },
+  gpsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  gpsIcon: {
+    marginRight: 2,
+  },
+  gpsText: {
+    fontSize: 10,
+    fontFamily: theme.fonts.regular,
+    color: 'rgba(255, 255, 255, 0.7)',
   },
 });

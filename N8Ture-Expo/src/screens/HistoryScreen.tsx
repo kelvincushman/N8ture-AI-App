@@ -121,6 +121,9 @@ export default function HistoryScreen() {
         confidence={item.confidence}
         type={item.type}
         date={formatDate(item.timestamp)}
+        latitude={item.latitude}
+        longitude={item.longitude}
+        accuracy={item.accuracy}
         onPress={() => handleCardPress(item)}
       />
     </View>
