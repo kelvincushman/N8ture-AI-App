@@ -3,9 +3,10 @@
  *
  * Displays species identification results with detailed information
  * Shows confidence, edibility, habitat, and other species data
+ * Allows saving to history with GPS coordinates and navigating to detailed view
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -15,8 +16,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
 import { RootStackParamList } from '../types/navigation';
 import { useSpeciesIdentification } from '../hooks/useSpeciesIdentification';
@@ -25,6 +28,9 @@ import {
   getEdibilityInfo,
   getCategoryIcon,
 } from '../types/species';
+import { historyService } from '../services/historyService';
+import { useCheckPremium } from '../hooks/useTrialStatus';
+import { SpeciesData } from '../types/identification';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 type ResultsScreenRouteProp = RouteProp<RootStackParamList, 'Results'>;
@@ -32,10 +38,14 @@ type ResultsScreenRouteProp = RouteProp<RootStackParamList, 'Results'>;
 export default function ResultsScreen() {
   const route = useRoute<ResultsScreenRouteProp>();
   const navigation = useNavigation();
-  const { imageUri, imageBase64 } = route.params;
+  const { imageUri, imageBase64, latitude, longitude, accuracy } = route.params;
 
   const { loading, error, result, identify, retry, clear } =
     useSpeciesIdentification();
+
+  const { isPremium } = useCheckPremium();
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasSaved, setHasSaved] = useState(false);
 
   // Trigger identification on mount
   useEffect(() => {
@@ -76,10 +86,93 @@ export default function ResultsScreen() {
 
   /**
    * Handle save to history
+   * Saves identification with photo and GPS coordinates
    */
-  const handleSaveToHistory = () => {
-    // TODO: Implement save to history
-    Alert.alert('Saved', 'Species identification saved to your history!');
+  const handleSaveToHistory = async () => {
+    if (!result || !imageUri) {
+      Alert.alert('Error', 'Cannot save - missing identification data');
+      return;
+    }
+
+    if (hasSaved) {
+      Alert.alert('Already Saved', 'This identification has already been saved to your history.');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      // Convert result to SpeciesData format
+      const speciesData: SpeciesData = {
+        id: `species_${Date.now()}`,
+        commonName: result.commonName,
+        scientificName: result.scientificName,
+        family: '', // TODO: Get from result if available
+        category: result.category,
+        safetyLevel: result.edibility === 'EDIBLE' ? 'safe' :
+                     result.edibility === 'DANGEROUS' ? 'dangerous' :
+                     result.edibility === 'CONDITIONAL' ? 'caution' : 'unknown',
+        description: result.description,
+        imageUrls: [imageUri],
+        detailedInfo: {
+          habitat: result.habitat,
+          edibility: result.edibilityNotes,
+          conservation: result.conservationStatus,
+        },
+      };
+
+      // Save to history with GPS coordinates
+      const savedRecord = await historyService.saveIdentification({
+        species: speciesData,
+        imageUri,
+        confidence: result.confidence / 100, // Convert percentage to 0-1
+        latitude,
+        longitude,
+        accuracy,
+        isPremium,
+      });
+
+      setHasSaved(true);
+
+      // Show success message with GPS info
+      const gpsInfo = latitude && longitude
+        ? `\n\nLocation: ${latitude.toFixed(4)}°, ${longitude.toFixed(4)}°`
+        : '';
+
+      Alert.alert(
+        'Saved to History! 🎉',
+        `${result.commonName} has been saved to your identification history.${gpsInfo}`,
+        [
+          {
+            text: 'View History',
+            onPress: () => navigation.navigate('MainTabs' as never, { screen: 'HistoryTab' } as never),
+          },
+          { text: 'OK', style: 'default' },
+        ]
+      );
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      Alert.alert('Error', 'Failed to save identification. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  /**
+   * Handle learn more
+   * Navigates to Species Detail Screen
+   */
+  const handleLearnMore = () => {
+    if (!result) return;
+
+    navigation.navigate('SpeciesDetail' as never, {
+      speciesId: `species_${Date.now()}`,
+      speciesName: result.commonName,
+      imageUri,
+      latitude,
+      longitude,
+      accuracy,
+    } as never);
   };
 
   // Loading state
@@ -235,20 +328,68 @@ export default function ResultsScreen() {
           </View>
         )}
 
+        {/* GPS Coordinates Badge (if available) */}
+        {latitude && longitude && (
+          <View style={styles.card}>
+            <View style={styles.gpsHeader}>
+              <Ionicons name="location" size={20} color={theme.colors.primary.main} />
+              <Text style={styles.cardTitle}>Location Captured</Text>
+            </View>
+            <Text style={styles.gpsText}>
+              Latitude: {latitude.toFixed(6)}°{'\n'}
+              Longitude: {longitude.toFixed(6)}°
+              {accuracy && `\nAccuracy: ±${accuracy.toFixed(1)}m`}
+            </Text>
+          </View>
+        )}
+
         {/* Action Buttons */}
         <View style={styles.actionsContainer}>
+          {/* Save to History Button */}
           <TouchableOpacity
-            style={styles.primaryButton}
+            style={[
+              styles.primaryButton,
+              (isSaving || hasSaved) && styles.primaryButtonDisabled
+            ]}
             onPress={handleSaveToHistory}
+            disabled={isSaving || hasSaved}
           >
-            <Text style={styles.primaryButtonText}>Save to History</Text>
+            {isSaving ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <View style={styles.buttonContent}>
+                <Ionicons
+                  name={hasSaved ? "checkmark-circle" : "save-outline"}
+                  size={20}
+                  color="#FFFFFF"
+                />
+                <Text style={styles.primaryButtonText}>
+                  {hasSaved ? 'Saved to History' : 'Save to History'}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
 
+          {/* Learn More Button */}
+          <TouchableOpacity
+            style={styles.learnMoreButton}
+            onPress={handleLearnMore}
+          >
+            <View style={styles.buttonContent}>
+              <Ionicons name="information-circle-outline" size={20} color={theme.colors.primary.main} />
+              <Text style={styles.learnMoreButtonText}>Learn More</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Identify Another Button */}
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={handleIdentifyAnother}
           >
-            <Text style={styles.secondaryButtonText}>Identify Another</Text>
+            <View style={styles.buttonContent}>
+              <Ionicons name="camera-outline" size={20} color={theme.colors.secondary.main} />
+              <Text style={styles.secondaryButtonText}>Identify Another</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -389,10 +530,30 @@ const styles = StyleSheet.create({
     color: theme.colors.primary.dark,
   },
 
+  // GPS Card
+  gpsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    marginBottom: theme.spacing.sm,
+  },
+  gpsText: {
+    ...theme.typography.body2,
+    color: theme.colors.text.primary,
+    fontFamily: 'monospace',
+    lineHeight: 20,
+  },
+
   // Actions
   actionsContainer: {
     paddingHorizontal: theme.spacing.lg,
     gap: theme.spacing.md,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.xs,
   },
   primaryButton: {
     backgroundColor: theme.colors.primary.main,
@@ -401,9 +562,25 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     ...theme.shadows.md,
   },
+  primaryButtonDisabled: {
+    opacity: 0.6,
+  },
   primaryButtonText: {
     ...theme.typography.button,
     color: theme.colors.primary.contrastText,
+    textAlign: 'center',
+  },
+  learnMoreButton: {
+    backgroundColor: theme.colors.primary.light + '30',
+    borderWidth: 2,
+    borderColor: theme.colors.primary.main,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+  },
+  learnMoreButtonText: {
+    ...theme.typography.button,
+    color: theme.colors.primary.main,
     textAlign: 'center',
   },
   secondaryButton: {
