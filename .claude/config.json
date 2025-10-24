@@ -1,0 +1,76 @@
+{
+  "project": {
+    "name": "N8ture AI App",
+    "description": "Wildlife, plant, and fungi identification powered by AI",
+    "repository": "https://github.com/kelvincushman/N8ture-AI-App",
+    "branch_prefix": "claude/",
+    "session_id": "011CUSCnd5FiC6H9kv3qLH9c"
+  },
+  "agents": {
+    "enabled": true,
+    "directory": ".claude/agents",
+    "available": [
+      "git-agent",
+      "expo-expert",
+      "clerk-auth-expert",
+      "firebase-expert",
+      "gemini-api-expert",
+      "react-native-expert",
+      "navigation-expert",
+      "ui-ux-implementation-agent",
+      "component-implementation-agent",
+      "feature-implementation-agent",
+      "testing-implementation-agent",
+      "devops-agent",
+      "audio-bird-identification-expert",
+      "bluetooth-audiomoth-expert",
+      "prd-agent",
+      "enhanced-project-manager-agent"
+    ]
+  },
+  "skills": {
+    "enabled": true,
+    "directory": ".claude/skills",
+    "available": [
+      "clerk-auth-expert"
+    ]
+  },
+  "git": {
+    "auto_commit": false,
+    "commit_message_format": "conventional",
+    "require_coauthor": true,
+    "coauthor": "Claude <noreply@anthropic.com>",
+    "enforce_branch_naming": true,
+    "hooks": {
+      "pre_commit": true,
+      "pre_push": true,
+      "stop_hook": true
+    }
+  },
+  "development": {
+    "primary_language": "TypeScript",
+    "framework": "React Native with Expo SDK 54",
+    "backend": "Firebase Cloud Functions",
+    "ai_service": "Google Gemini API",
+    "authentication": "Clerk",
+    "main_directories": [
+      "react-expo-app/src",
+      "react-expo-app/functions",
+      "docs",
+      "agents",
+      "skills"
+    ]
+  },
+  "branding": {
+    "primary_color": "#708C6A",
+    "accent_color": "#8FAF87",
+    "dark_color": "#2D3A30",
+    "theme_file": "react-expo-app/src/constants/theme.ts"
+  },
+  "documentation": {
+    "main_readme": "README.md",
+    "setup_guide": "react-expo-app/SETUP_GUIDE.md",
+    "api_docs": "docs/",
+    "changelog": "CHANGELOG.md"
+  }
+}
