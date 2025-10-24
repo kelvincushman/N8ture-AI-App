@@ -12,9 +12,8 @@ import { CustomBottomTabNavigator } from './CustomBottomTabNavigator';
 import { CaptureModal } from '../components/capture/CaptureModal';
 
 // Import screens
-import HomeScreen from '../screens/HomeScreen';
+import WalkScreen from '../screens/WalkScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import MapScreen from '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AuthScreen from '../screens/auth/AuthScreen';
 import CameraScreen from '../screens/CameraScreen';
@@ -24,13 +23,14 @@ import ResultsScreen from '../screens/ResultsScreen';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabsParamList>();
 
-// Main Tabs Navigator with custom bottom bar
+// Main Tabs Navigator with custom bottom bar (AllTrails Style: 2 tabs)
 function MainTabsNavigator({ onCapturePress }: { onCapturePress: () => void }) {
   return (
     <Tab.Navigator
       tabBar={(props) => (
         <CustomBottomTabNavigator {...props} onCapturePress={onCapturePress} />
       )}
+      initialRouteName="HistoryTab" // Content-first approach (AllTrails style)
       screenOptions={{
         headerStyle: {
           backgroundColor: theme.colors.primary.main,
@@ -42,11 +42,12 @@ function MainTabsNavigator({ onCapturePress }: { onCapturePress: () => void }) {
       }}
     >
       <Tab.Screen
-        name="HomeTab"
-        component={HomeScreen}
+        name="WalksTab"
+        component={WalkScreen}
         options={{
-          title: 'N8ture AI',
-          tabBarLabel: 'Home',
+          title: 'Walks',
+          tabBarLabel: 'Walks',
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -56,23 +57,6 @@ function MainTabsNavigator({ onCapturePress }: { onCapturePress: () => void }) {
           title: 'History',
           tabBarLabel: 'History',
           headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="MapTab"
-        component={MapScreen}
-        options={{
-          title: 'Map',
-          tabBarLabel: 'Map',
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen
-        name="ProfileTab"
-        component={ProfileScreen}
-        options={{
-          title: 'Profile',
-          tabBarLabel: 'Profile',
         }}
       />
     </Tab.Navigator>
@@ -178,6 +162,26 @@ export default function RootNavigator() {
             component={ResultsScreen}
             options={{
               title: 'Identification Results',
+              presentation: 'card',
+            }}
+          />
+
+          {/* Profile (accessed from header) */}
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              title: 'Profile',
+              presentation: 'card',
+            }}
+          />
+
+          {/* Settings (accessed from header) */}
+          <Stack.Screen
+            name="Settings"
+            component={ProfileScreen} // TODO: Create dedicated Settings screen
+            options={{
+              title: 'Settings',
               presentation: 'card',
             }}
           />

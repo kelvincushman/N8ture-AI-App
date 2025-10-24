@@ -1,10 +1,11 @@
 /**
- * Custom Bottom Tab Navigator
+ * Custom Bottom Tab Navigator (AllTrails Style)
  *
  * Provides bottom tab navigation with an elevated center capture button.
  * Features:
- * - 5 tabs: Home, History, [Capture], Map, Profile
- * - Center button elevated 20px above tab bar
+ * - 2 tabs: Walks, History
+ * - Center button elevated 30px above tab bar (AllTrails style)
+ * - Larger button: 70px diameter (vs standard 60px)
  * - Gradient styling with N8ture AI colors
  * - Blur effect background on iOS
  * - Safe area support
@@ -24,6 +25,7 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
+import { WalkIcon } from '../components/icons/WalkIcon';
 
 interface CustomBottomTabNavigatorProps extends BottomTabBarProps {
   onCapturePress: () => void;
@@ -37,19 +39,30 @@ export const CustomBottomTabNavigator: React.FC<CustomBottomTabNavigatorProps> =
 }) => {
   const insets = useSafeAreaInsets();
 
-  // Define tab icons
-  const getTabIcon = (routeName: string): keyof typeof Ionicons.glyphMap => {
+  // Get icon for each tab
+  const getTabIcon = (routeName: string, isFocused: boolean) => {
+    const color = isFocused ? theme.colors.primary.main : theme.colors.text.secondary;
+    const size = 26;
+
     switch (routeName) {
-      case 'Home':
-        return 'home';
-      case 'History':
-        return 'list';
-      case 'Map':
-        return 'map';
-      case 'Profile':
-        return 'person';
+      case 'WalksTab':
+        return <WalkIcon size={size} color={color} />;
+      case 'HistoryTab':
+        return <Ionicons name="grid-outline" size={size} color={color} />;
       default:
-        return 'ellipse';
+        return <Ionicons name="ellipse" size={size} color={color} />;
+    }
+  };
+
+  // Get label for each tab
+  const getTabLabel = (routeName: string): string => {
+    switch (routeName) {
+      case 'WalksTab':
+        return 'Walks';
+      case 'HistoryTab':
+        return 'History';
+      default:
+        return routeName;
     }
   };
 
@@ -65,10 +78,6 @@ export const CustomBottomTabNavigator: React.FC<CustomBottomTabNavigatorProps> =
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 
-          // Determine if this is the middle index (for center button spacing)
-          const middleIndex = Math.floor(state.routes.length / 2);
-          const isMiddleIndex = index === middleIndex;
-
           const onPress = () => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -81,33 +90,22 @@ export const CustomBottomTabNavigator: React.FC<CustomBottomTabNavigatorProps> =
             }
           };
 
-          // For middle index, show spacer for center button
-          if (isMiddleIndex) {
-            return <View key={route.key} style={styles.centerSpacer} />;
-          }
-
-          const icon = getTabIcon(route.name);
+          const icon = getTabIcon(route.name, isFocused);
           const label = options.tabBarLabel !== undefined
             ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
+            : getTabLabel(route.name);
 
           return (
             <TouchableOpacity
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityLabel={options.tabBarAccessibilityLabel || label}
               testID={options.tabBarTestID}
               onPress={onPress}
               style={styles.tab}
             >
-              <Ionicons
-                name={icon}
-                size={24}
-                color={isFocused ? theme.colors.primary.main : theme.colors.text.secondary}
-              />
+              {icon}
               <Text
                 style={[
                   styles.tabLabel,
@@ -125,7 +123,7 @@ export const CustomBottomTabNavigator: React.FC<CustomBottomTabNavigatorProps> =
         })}
       </View>
 
-      {/* Elevated Center Capture Button */}
+      {/* Elevated Center Capture Button (AllTrails Style) */}
       <View style={styles.centerButtonContainer}>
         <TouchableOpacity
           style={styles.centerButton}
@@ -140,7 +138,7 @@ export const CustomBottomTabNavigator: React.FC<CustomBottomTabNavigatorProps> =
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
-            <Ionicons name="add" size={32} color="#FFFFFF" />
+            <Ionicons name="camera" size={36} color="#FFFFFF" />
           </LinearGradient>
         </TouchableOpacity>
 
@@ -188,33 +186,31 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs,
     fontFamily: theme.fonts.regular,
   },
-  centerSpacer: {
-    width: 80, // Space for center button
-  },
+  // AllTrails-style center button (larger, more elevated)
   centerButtonContainer: {
     position: 'absolute',
-    top: -20, // Elevate 20px above tab bar
+    top: -30, // Elevated 30px above tab bar (AllTrails style)
     left: '50%',
-    marginLeft: -30, // Half of button width (60/2)
+    marginLeft: -35, // Half of button width (70/2)
     zIndex: 10,
   },
   centerButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70, // Larger than standard (was 60px)
+    height: 70,
+    borderRadius: 35,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
-    borderWidth: 3,
+    borderWidth: 4, // Thicker border (was 3px)
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 6 }, // More dramatic shadow
+        shadowOpacity: 0.25,
+        shadowRadius: 12,
       },
       android: {
-        elevation: 6,
+        elevation: 8,
       },
     }),
   },
@@ -228,19 +224,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: 'transparent',
     ...Platform.select({
       ios: {
         shadowColor: theme.colors.primary.main,
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.3,
-        shadowRadius: 12,
+        shadowRadius: 14,
       },
       android: {
-        elevation: 12,
+        elevation: 14,
       },
     }),
   },

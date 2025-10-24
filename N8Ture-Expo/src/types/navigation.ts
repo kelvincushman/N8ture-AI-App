@@ -4,12 +4,10 @@
 
 import { CaptureConfig } from './capture';
 
-// Bottom Tab Navigator
+// Bottom Tab Navigator (AllTrails-style: 2 tabs)
 export type MainTabsParamList = {
-  HomeTab: undefined;
+  WalksTab: undefined;
   HistoryTab: undefined;
-  MapTab: undefined;
-  ProfileTab: undefined;
 };
 
 // Root Stack Navigator (for modals and main tabs)
@@ -45,9 +43,20 @@ export type RootStackParamList = {
     audioUri: string;
     identificationId?: string;
   };
+  SpeciesDetail: {
+    speciesId: string;
+    speciesName: string;
+  };
 
-  // Other screens
+  // Walk screens
+  WalkSession: {
+    sessionId: string;
+    isActive?: boolean;
+  };
+
+  // Settings and profile
   Settings: undefined;
+  Profile: undefined;
 };
 
 declare global {
