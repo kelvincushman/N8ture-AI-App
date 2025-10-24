@@ -1,14 +1,15 @@
 /**
- * History Screen
+ * History Screen (AllTrails Style)
  *
- * Displays user's past species identifications.
- * Shows:
- * - Recent identifications
- * - Saved/favorited species
- * - Walk sessions
- * - Filtering and search
+ * Displays user's past species identifications in image grid.
+ * Features:
+ * - 2-column image grid layout
+ * - Visual cards with species photos
+ * - Statistics dashboard
+ * - Pull to refresh
+ * - Filter options
  *
- * TODO: Implement full history with Firestore integration
+ * TODO: Implement Firebase integration, real images, infinite scroll
  */
 
 import React from 'react';
@@ -17,15 +18,30 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../constants/theme';
+import { HistoryCard } from '../components/history/HistoryCard';
+
+const { width } = Dimensions.get('window');
+const CARD_GAP = 12;
+const CARD_WIDTH = (width - (theme.spacing.lg * 2) - CARD_GAP) / 2;
+
+interface HistoryItem {
+  id: string;
+  commonName: string;
+  scientificName: string;
+  date: string;
+  type: 'audio' | 'camera';
+  confidence: number;
+  imageUri?: string;
+}
 
 export default function HistoryScreen() {
-  // Mock data for now
-  const mockHistory = [
+  // Mock data with more entries for grid demo
+  const mockHistory: HistoryItem[] = [
     {
       id: '1',
       commonName: 'Robin',
@@ -50,41 +66,77 @@ export default function HistoryScreen() {
       type: 'audio',
       confidence: 0.95,
     },
+    {
+      id: '4',
+      commonName: 'Red Fox',
+      scientificName: 'Vulpes vulpes',
+      date: '3 days ago',
+      type: 'camera',
+      confidence: 0.91,
+    },
+    {
+      id: '5',
+      commonName: 'Blackbird',
+      scientificName: 'Turdus merula',
+      date: '4 days ago',
+      type: 'audio',
+      confidence: 0.87,
+    },
+    {
+      id: '6',
+      commonName: 'Chaffinch',
+      scientificName: 'Fringilla coelebs',
+      date: '5 days ago',
+      type: 'audio',
+      confidence: 0.93,
+    },
+    {
+      id: '7',
+      commonName: 'Common Daisy',
+      scientificName: 'Bellis perennis',
+      date: '1 week ago',
+      type: 'camera',
+      confidence: 0.89,
+    },
+    {
+      id: '8',
+      commonName: 'Great Tit',
+      scientificName: 'Parus major',
+      date: '1 week ago',
+      type: 'audio',
+      confidence: 0.94,
+    },
   ];
 
-  const renderHistoryItem = ({ item }: { item: typeof mockHistory[0] }) => (
-    <TouchableOpacity style={styles.historyCard}>
-      <View style={styles.historyIcon}>
-        <Ionicons
-          name={item.type === 'audio' ? 'musical-notes' : 'camera'}
-          size={24}
-          color={theme.colors.primary.main}
-        />
-      </View>
-      <View style={styles.historyInfo}>
-        <Text style={styles.historyName}>{item.commonName}</Text>
-        <Text style={styles.historyScientific}>{item.scientificName}</Text>
-        <Text style={styles.historyMeta}>
-          {item.date} • {Math.round(item.confidence * 100)}% confidence
-        </Text>
-      </View>
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color={theme.colors.text.secondary}
+  const handleCardPress = (item: HistoryItem) => {
+    // TODO: Navigate to species detail screen
+    console.log('Card pressed:', item.commonName);
+  };
+
+  const renderHistoryCard = ({ item }: { item: HistoryItem }) => (
+    <View style={styles.cardWrapper}>
+      <HistoryCard
+        id={item.id}
+        imageUri={item.imageUri}
+        commonName={item.commonName}
+        scientificName={item.scientificName}
+        confidence={item.confidence}
+        type={item.type}
+        date={item.date}
+        onPress={() => handleCardPress(item)}
       />
-    </TouchableOpacity>
+    </View>
   );
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>History</Text>
-        <TouchableOpacity style={styles.filterButton}>
-          <Ionicons name="filter" size={20} color={theme.colors.primary.main} />
-        </TouchableOpacity>
+        {/* TODO: Implement filter/search */}
       </View>
 
+      {/* Statistics Dashboard */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>42</Text>
@@ -100,21 +152,25 @@ export default function HistoryScreen() {
         </View>
       </View>
 
+      {/* Image Grid */}
       <FlatList
         data={mockHistory}
-        renderItem={renderHistoryItem}
+        renderItem={renderHistoryCard}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
+        numColumns={2}
+        contentContainerStyle={styles.gridContainer}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons
-              name="time-outline"
-              size={64}
+              name="images-outline"
+              size={80}
               color={theme.colors.text.secondary}
             />
-            <Text style={styles.emptyText}>No history yet</Text>
+            <Text style={styles.emptyText}>No identifications yet</Text>
             <Text style={styles.emptySubtext}>
-              Start identifying species to see your history here
+              Tap the capture button to start identifying species
             </Text>
           </View>
         }
@@ -142,13 +198,12 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.bold,
     color: theme.colors.text.primary,
   },
-  filterButton: {
-    padding: theme.spacing.sm,
-  },
+  // Statistics Dashboard
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
     gap: theme.spacing.sm,
   },
   statCard: {
@@ -169,66 +224,38 @@ const styles = StyleSheet.create({
     color: theme.colors.text.secondary,
     marginTop: theme.spacing.xs,
   },
-  listContainer: {
-    padding: theme.spacing.lg,
-    paddingBottom: 100, // Space for bottom tab bar
+  // Grid Layout
+  gridContainer: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    paddingBottom: 120, // Extra space for bottom tab bar + elevated button
   },
-  historyCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border || '#E0E0E0',
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: CARD_GAP,
   },
-  historyIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.primary.light + '20',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: theme.spacing.md,
+  cardWrapper: {
+    width: CARD_WIDTH,
   },
-  historyInfo: {
-    flex: 1,
-  },
-  historyName: {
-    fontSize: 16,
-    fontFamily: theme.fonts.semiBold,
-    color: theme.colors.text.primary,
-    marginBottom: 2,
-  },
-  historyScientific: {
-    fontSize: 14,
-    fontFamily: theme.fonts.regularItalic || theme.fonts.regular,
-    color: theme.colors.text.secondary,
-    marginBottom: 4,
-  },
-  historyMeta: {
-    fontSize: 12,
-    fontFamily: theme.fonts.regular,
-    color: theme.colors.text.secondary,
-  },
+  // Empty State
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: theme.spacing.xxl * 2,
+    paddingTop: theme.spacing.xxl * 3,
+    paddingHorizontal: theme.spacing.xl,
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: theme.fonts.semiBold,
     color: theme.colors.text.primary,
     marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.sm,
   },
   emptySubtext: {
     fontSize: 14,
     fontFamily: theme.fonts.regular,
     color: theme.colors.text.secondary,
-    marginTop: theme.spacing.sm,
     textAlign: 'center',
-    paddingHorizontal: theme.spacing.xl,
+    lineHeight: 20,
   },
 });
