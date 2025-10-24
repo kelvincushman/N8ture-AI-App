@@ -1,0 +1,32 @@
+{
+  "cli": {
+    "version": ">= 5.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_...",
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": ""
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_..."
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_..."
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

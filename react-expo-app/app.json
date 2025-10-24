@@ -1,0 +1,86 @@
+{
+  "expo": {
+    "name": "N8ture AI",
+    "slug": "n8ture-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#708C6A"
+    },
+    "scheme": "n8ture-ai",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow N8ture AI to access your camera to identify wildlife, plants, and fungi."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow N8ture AI to record bird songs and wildlife sounds for identification."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow N8ture AI to access your location to provide habitat information and track your discoveries."
+        }
+      ],
+      [
+        "react-native-ble-plx",
+        {
+          "isBackgroundEnabled": true,
+          "modes": ["peripheral", "central"],
+          "bluetoothAlwaysPermission": "Allow N8ture AI to connect to AudioMoth devices for wildlife sound recording."
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.n8ture.ai",
+      "infoPlist": {
+        "NSCameraUsageDescription": "N8ture AI needs camera access to identify wildlife, plants, and fungi.",
+        "NSMicrophoneUsageDescription": "N8ture AI needs microphone access to record bird songs and wildlife sounds.",
+        "NSLocationWhenInUseUsageDescription": "N8ture AI uses your location to provide habitat information.",
+        "NSLocationAlwaysUsageDescription": "N8ture AI uses your location to track your discoveries.",
+        "NSBluetoothAlwaysUsageDescription": "N8ture AI uses Bluetooth to connect to AudioMoth devices.",
+        "NSBluetoothPeripheralUsageDescription": "N8ture AI uses Bluetooth to connect to AudioMoth devices."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#708C6A"
+      },
+      "package": "com.n8ture.ai",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ],
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    }
+  }
+}
