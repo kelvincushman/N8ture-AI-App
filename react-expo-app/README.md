@@ -193,10 +193,46 @@ This project uses an agent-based development workflow with specialized agents:
 
 See `/agents/` directory for agent configurations.
 
-## Documentation
+## Camera-Based Species Identification
 
-Comprehensive documentation is available in `/docs/react-expo/`:
+The app now features a complete camera-based species identification system!
 
+### Features
+- ✅ Full-screen camera with expo-camera
+- ✅ Image capture with preview
+- ✅ Google Gemini Vision API integration
+- ✅ Firebase Cloud Functions backend
+- ✅ Detailed species information
+- ✅ Edibility and toxicity warnings
+- ✅ Trial system integration
+- ✅ N8ture AI branded UI
+
+### Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+2. **For Testing (Mock Service):**
+   - Camera feature works out of the box with mock data
+   - No Firebase setup required for UI testing
+   - Returns sample Red Fox data
+
+3. **For Production (Real AI):**
+   - Follow [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for complete setup
+   - Configure Firebase project
+   - Get Gemini API key
+   - Deploy Cloud Functions
+
+### Documentation
+
+#### Implementation Docs
+- **[FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** - Complete Firebase and Gemini setup guide
+- **[CAMERA_USAGE.md](./CAMERA_USAGE.md)** - User guide for camera feature
+- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical implementation details
+
+#### Architecture Docs (in `/docs/react-expo/`)
 - [Camera Integration](../docs/react-expo/CAMERA_INTEGRATION.md)
 - [Microphone Integration](../docs/react-expo/MICROPHONE_INTEGRATION.md)
 - [Bluetooth Integration](../docs/react-expo/BLUETOOTH_INTEGRATION.md)
@@ -220,6 +256,22 @@ Comprehensive documentation is available in `/docs/react-expo/`:
 - Run `npx expo-doctor` to diagnose issues
 - Check EAS build logs
 - Verify all dependencies are compatible with Expo SDK 54
+
+**Camera not working:**
+- Camera requires physical device (won't work in web browser)
+- Check camera permissions are granted
+- See [CAMERA_USAGE.md](./CAMERA_USAGE.md) for troubleshooting
+
+**"Firebase not initialized" error:**
+- This is normal for development without Firebase setup
+- App automatically uses mock service
+- For production, follow [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
+
+**Dependency conflicts:**
+- Use `--legacy-peer-deps` flag with npm:
+  ```bash
+  npm install --legacy-peer-deps
+  ```
 
 ### Getting Help
 

@@ -72,8 +72,8 @@ export default function HomeScreen() {
       return;
     }
 
-    // TODO: Navigate to camera screen
-    Alert.alert('Success', 'Camera will open here. This feature is coming soon!');
+    // Navigate to camera screen
+    navigation.navigate('Camera' as never);
   };
 
   const handleViewHistory = () => {

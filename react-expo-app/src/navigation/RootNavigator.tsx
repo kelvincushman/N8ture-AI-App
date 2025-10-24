@@ -10,6 +10,8 @@ import { useAuth } from '../hooks/useAuth';
 import HomeScreen from '../screens/HomeScreen';
 import AuthScreen from '../screens/auth/AuthScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import CameraScreen from '../screens/CameraScreen';
+import ResultsScreen from '../screens/ResultsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -62,6 +64,23 @@ export default function RootNavigator() {
           component={ProfileScreen}
           options={{
             title: 'Profile',
+          }}
+        />
+
+        <Stack.Screen
+          name="Camera"
+          component={CameraScreen}
+          options={{
+            title: 'Camera',
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="Results"
+          component={ResultsScreen}
+          options={{
+            title: 'Identification Results',
           }}
         />
       </Stack.Navigator>

@@ -10,7 +10,9 @@ export type RootStackParamList = {
     type: 'plant' | 'wildlife' | 'fungi';
   };
   Results: {
-    identificationId: string;
+    imageUri: string;
+    imageBase64?: string;
+    identificationId?: string;
   };
   History: undefined;
   Profile: undefined;
