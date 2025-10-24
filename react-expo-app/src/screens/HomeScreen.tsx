@@ -1,22 +1,133 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { theme } from '../constants/theme';
+import { useAuth } from '../hooks/useAuth';
+import { useRecordIdentification } from '../hooks/useTrialStatus';
+import TrialBadge from '../components/trial/TrialBadge';
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
+  const { isSignedIn, userProfile } = useAuth();
+  const { canIdentify, recordIdentification, isRecording } = useRecordIdentification();
+
+  const handleOpenCamera = async () => {
+    // Check if user is signed in
+    if (!isSignedIn) {
+      Alert.alert(
+        'Sign In Required',
+        'Please sign in to use the identification feature.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Sign In',
+            onPress: () => navigation.navigate('Auth' as never),
+          },
+        ]
+      );
+      return;
+    }
+
+    // Check if user can perform identification
+    if (!canIdentify) {
+      Alert.alert(
+        'Trial Limit Reached',
+        'You have used all your free trials. Upgrade to premium for unlimited identifications.',
+        [
+          { text: 'Maybe Later', style: 'cancel' },
+          {
+            text: 'Upgrade Now',
+            onPress: () => {
+              // TODO: Navigate to paywall
+              console.log('Navigate to paywall');
+            },
+          },
+        ]
+      );
+      return;
+    }
+
+    // Record the identification attempt
+    const result = await recordIdentification();
+
+    if (!result.success) {
+      if (result.shouldShowPaywall) {
+        Alert.alert(
+          'Trial Limit Reached',
+          result.message,
+          [
+            { text: 'Maybe Later', style: 'cancel' },
+            {
+              text: 'Upgrade Now',
+              onPress: () => {
+                // TODO: Navigate to paywall
+                console.log('Navigate to paywall');
+              },
+            },
+          ]
+        );
+      } else {
+        Alert.alert('Error', result.message);
+      }
+      return;
+    }
+
+    // TODO: Navigate to camera screen
+    Alert.alert('Success', 'Camera will open here. This feature is coming soon!');
+  };
+
+  const handleViewHistory = () => {
+    if (!isSignedIn) {
+      Alert.alert(
+        'Sign In Required',
+        'Please sign in to view your identification history.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Sign In',
+            onPress: () => navigation.navigate('Auth' as never),
+          },
+        ]
+      );
+      return;
+    }
+
+    // TODO: Navigate to history screen
+    Alert.alert('History', 'History screen coming soon!');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to N8ture AI</Text>
+        <Text style={styles.title}>
+          Welcome{userProfile?.firstName ? ` ${userProfile.firstName}` : ''}!
+        </Text>
         <Text style={styles.subtitle}>
           Identify wildlife, plants, and fungi with AI-powered analysis
         </Text>
 
+        {/* Trial Badge - only show if signed in */}
+        {isSignedIn && (
+          <View style={styles.trialBadgeContainer}>
+            <TrialBadge showUpgradeButton={true} />
+          </View>
+        )}
+
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.primaryButton}>
-            <Text style={styles.primaryButtonText}>Open Camera</Text>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={handleOpenCamera}
+            disabled={isRecording}
+          >
+            <Text style={styles.primaryButtonText}>
+              {isRecording ? 'Processing...' : 'Open Camera'}
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.secondaryButton}>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={handleViewHistory}
+          >
             <Text style={styles.secondaryButtonText}>View History</Text>
           </TouchableOpacity>
         </View>
@@ -65,6 +176,9 @@ const styles = StyleSheet.create({
     ...theme.typography.body1,
     color: theme.colors.text.secondary,
     marginBottom: theme.spacing.xl,
+  },
+  trialBadgeContainer: {
+    marginBottom: theme.spacing.lg,
   },
   buttonContainer: {
     marginBottom: theme.spacing.xl,
