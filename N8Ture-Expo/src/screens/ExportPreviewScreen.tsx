@@ -9,7 +9,7 @@
  * - Generate and share PDF
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -28,13 +28,18 @@ import { theme } from '../constants/theme';
 import { RootStackParamList } from '../types/navigation';
 import { historyService } from '../services/historyService';
 import { pdfExportService, ExportOptions, RouteData } from '../services/pdfExportService';
+import { mapSnapshotService } from '../services/mapSnapshotService';
 import { IdentificationRecord } from '../types/identification';
+import MapSnapshotComponent from '../components/MapSnapshotComponent';
 
 type ExportPreviewScreenRouteProp = RouteProp<RootStackParamList, 'ExportPreview'>;
 
 export default function ExportPreviewScreen() {
   const route = useRoute<ExportPreviewScreenRouteProp>();
   const navigation = useNavigation();
+
+  // Refs
+  const mapSnapshotRef = useRef<View>(null);
 
   // State
   const [history, setHistory] = useState<IdentificationRecord[]>([]);
@@ -143,9 +148,31 @@ export default function ExportPreviewScreen() {
         };
       }
 
-      // TODO: Capture map snapshot if includeMap is true
-      // For now, we'll pass undefined
-      const mapImageUri = undefined;
+      // Capture map snapshot if includeMap is true
+      let mapImageUri: string | undefined;
+      if (includeMap && mapSnapshotRef.current) {
+        console.log('Capturing map snapshot for PDF...');
+
+        // Filter to selected identifications
+        const selectedHistory = history.filter(item =>
+          selectedIds.has(item.id)
+        );
+
+        mapImageUri = await mapSnapshotService.captureMapView(
+          mapSnapshotRef.current,
+          {
+            identifications: selectedHistory,
+            width: 800,
+            height: 600,
+          }
+        ) || undefined;
+
+        if (mapImageUri) {
+          console.log('Map snapshot captured successfully:', mapImageUri);
+        } else {
+          console.log('Map snapshot not available (no GPS-tagged entries)');
+        }
+      }
 
       // Generate and share PDF
       await pdfExportService.generateAndSharePDF(
@@ -154,6 +181,11 @@ export default function ExportPreviewScreen() {
         mapImageUri,
         routeData
       );
+
+      // Clean up map snapshot after PDF is generated
+      if (mapImageUri) {
+        await mapSnapshotService.deleteSnapshot(mapImageUri);
+      }
 
       Alert.alert(
         'PDF Generated! 📄',
@@ -399,6 +431,26 @@ export default function ExportPreviewScreen() {
           )}
         </TouchableOpacity>
       </View>
+
+      {/* Hidden Map Snapshot Component for PDF capture */}
+      {includeMap && (
+        <View
+          ref={mapSnapshotRef}
+          style={{
+            position: 'absolute',
+            top: -10000, // Render off-screen
+            left: -10000,
+            width: 800,
+            height: 600,
+          }}
+        >
+          <MapSnapshotComponent
+            identifications={history.filter(item => selectedIds.has(item.id))}
+            width={800}
+            height={600}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
