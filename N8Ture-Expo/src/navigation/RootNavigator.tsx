@@ -19,6 +19,7 @@ import AuthScreen from '../screens/auth/AuthScreen';
 import CameraScreen from '../screens/CameraScreen';
 import AudioRecordingScreen from '../screens/AudioRecordingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
+import AudioResultsScreen from '../screens/AudioResultsScreen';
 import PaywallScreen from '../screens/PaywallScreen';
 import SpeciesDetailScreen from '../screens/SpeciesDetailScreen';
 
@@ -164,6 +165,17 @@ export default function RootNavigator() {
             component={ResultsScreen}
             options={{
               title: 'Identification Results',
+              presentation: 'card',
+            }}
+          />
+
+          {/* Audio Results */}
+          <Stack.Screen
+            name="AudioResults"
+            component={AudioResultsScreen}
+            options={{
+              title: 'Audio Identification',
+              headerShown: false,
               presentation: 'card',
             }}
           />

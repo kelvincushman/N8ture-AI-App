@@ -21,6 +21,7 @@ import { theme } from '../constants/theme';
 import { useAudioRecording } from '../hooks/useAudioRecording';
 import { useRecordIdentification } from '../hooks/useTrialStatus';
 import { useAuth } from '../hooks/useAuth';
+import { useLocation, LocationCoordinates } from '../hooks/useLocation';
 import AudioWaveform from '../components/audio/AudioWaveform';
 import RecordButton from '../components/audio/RecordButton';
 import AudioPlayer from '../components/audio/AudioPlayer';
@@ -33,6 +34,9 @@ export default function AudioRecordingScreen() {
   const navigation = useNavigation();
   const { isSignedIn } = useAuth();
   const { canIdentify, recordIdentification, isRecording: isRecordingIdentification } = useRecordIdentification();
+
+  // Location hook for GPS capture
+  const { getCurrentLocation } = useLocation();
 
   // Audio recording hook
   const {
@@ -62,6 +66,7 @@ export default function AudioRecordingScreen() {
 
   // Local state
   const [selectedDuration, setSelectedDuration] = useState<number>(30);
+  const [gpsCoordinates, setGpsCoordinates] = useState<LocationCoordinates | null>(null);
 
   /**
    * Handle record button press
@@ -95,7 +100,7 @@ export default function AudioRecordingScreen() {
   };
 
   /**
-   * Start recording with permission check
+   * Start recording with permission check and GPS capture
    */
   const handleStartRecording = async () => {
     // Check permission
@@ -118,6 +123,16 @@ export default function AudioRecordingScreen() {
         );
         return;
       }
+    }
+
+    // Capture GPS coordinates when recording starts
+    const gps = await getCurrentLocation();
+    setGpsCoordinates(gps);
+
+    if (gps) {
+      console.log(`Audio GPS captured: ${gps.latitude}, ${gps.longitude} (±${gps.accuracy}m)`);
+    } else {
+      console.log('Audio recording started without GPS (location unavailable)');
     }
 
     // Start recording
@@ -198,12 +213,13 @@ export default function AudioRecordingScreen() {
       return;
     }
 
-    // TODO: Upload audio and get identification
-    Alert.alert(
-      'Audio Identification',
-      'Audio identification feature is coming soon! This will analyze bird songs, bat echolocation, and insect sounds.',
-      [{ text: 'OK' }]
-    );
+    // Navigate to AudioResults with GPS coordinates
+    navigation.navigate('AudioResults' as never, {
+      audioUri: recordingUri,
+      latitude: gpsCoordinates?.latitude,
+      longitude: gpsCoordinates?.longitude,
+      accuracy: gpsCoordinates?.accuracy,
+    } as never);
   };
 
   /**

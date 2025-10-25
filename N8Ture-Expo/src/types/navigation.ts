@@ -47,6 +47,7 @@ export type RootStackParamList = {
     identificationId?: string;
     latitude?: number;      // GPS latitude from recording location
     longitude?: number;     // GPS longitude from recording location
+    accuracy?: number;      // GPS accuracy in meters
   };
   SpeciesDetail: {
     speciesId: string;
