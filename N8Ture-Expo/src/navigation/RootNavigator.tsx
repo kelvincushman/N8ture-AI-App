@@ -21,6 +21,7 @@ import AudioRecordingScreen from '../screens/AudioRecordingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import AudioResultsScreen from '../screens/AudioResultsScreen';
 import MapViewScreen from '../screens/MapViewScreen';
+import ExportPreviewScreen from '../screens/ExportPreviewScreen';
 import PaywallScreen from '../screens/PaywallScreen';
 import SpeciesDetailScreen from '../screens/SpeciesDetailScreen';
 
@@ -198,6 +199,16 @@ export default function RootNavigator() {
             options={{
               headerShown: false,
               presentation: 'card',
+            }}
+          />
+
+          {/* Export Preview (accessed from History) */}
+          <Stack.Screen
+            name="ExportPreview"
+            component={ExportPreviewScreen}
+            options={{
+              headerShown: false,
+              presentation: 'modal',
             }}
           />
 

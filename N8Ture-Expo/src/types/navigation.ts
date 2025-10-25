@@ -58,6 +58,7 @@ export type RootStackParamList = {
     accuracy?: number;       // GPS accuracy in meters
   };
   MapView: undefined;        // Map view of all GPS-tagged identifications
+  ExportPreview: undefined;  // PDF export configuration and preview
 
   // Walk screens
   WalkSession: {

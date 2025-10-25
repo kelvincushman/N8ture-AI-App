@@ -102,6 +102,13 @@ export default function HistoryScreen() {
   };
 
   /**
+   * Navigate to export preview
+   */
+  const handleExportPress = () => {
+    navigation.navigate('ExportPreview' as never);
+  };
+
+  /**
    * Format timestamp to relative date string
    */
   const formatDate = (timestamp: number): string => {
@@ -167,13 +174,25 @@ export default function HistoryScreen() {
 
       {/* View Toggle Bar */}
       <View style={styles.viewToggleBar}>
-        <TouchableOpacity
-          style={styles.mapButton}
-          onPress={handleMapPress}
-        >
-          <Ionicons name="map" size={20} color={theme.colors.primary.main} />
-          <Text style={styles.mapButtonText}>Map View</Text>
-        </TouchableOpacity>
+        <View style={styles.viewToggleButtons}>
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={handleMapPress}
+          >
+            <Ionicons name="map" size={18} color={theme.colors.primary.main} />
+            <Text style={styles.toggleButtonText}>Map</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={handleExportPress}
+            disabled={history.length === 0}
+          >
+            <Ionicons name="download" size={18} color={history.length === 0 ? theme.colors.text.disabled : theme.colors.primary.main} />
+            <Text style={[styles.toggleButtonText, history.length === 0 && styles.toggleButtonTextDisabled]}>Export PDF</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Show count of GPS-tagged entries */}
         {history.filter(item => item.latitude && item.longitude).length > 0 && (
           <View style={styles.gpsCountBadge}>
@@ -254,7 +273,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.divider,
   },
-  mapButton: {
+  viewToggleButtons: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+  },
+  toggleButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.xs,
@@ -263,10 +286,13 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     backgroundColor: theme.colors.primary.light + '20',
   },
-  mapButtonText: {
-    fontSize: 14,
+  toggleButtonText: {
+    fontSize: 13,
     fontFamily: theme.fonts.semiBold,
     color: theme.colors.primary.main,
+  },
+  toggleButtonTextDisabled: {
+    color: theme.colors.text.disabled,
   },
   gpsCountBadge: {
     flexDirection: 'row',
