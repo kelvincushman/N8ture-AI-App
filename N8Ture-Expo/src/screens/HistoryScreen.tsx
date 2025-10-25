@@ -20,6 +20,7 @@ import {
   Dimensions,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -94,6 +95,13 @@ export default function HistoryScreen() {
   };
 
   /**
+   * Navigate to map view
+   */
+  const handleMapPress = () => {
+    navigation.navigate('MapView' as never);
+  };
+
+  /**
    * Format timestamp to relative date string
    */
   const formatDate = (timestamp: number): string => {
@@ -157,6 +165,26 @@ export default function HistoryScreen() {
         showProfile={true}
       />
 
+      {/* View Toggle Bar */}
+      <View style={styles.viewToggleBar}>
+        <TouchableOpacity
+          style={styles.mapButton}
+          onPress={handleMapPress}
+        >
+          <Ionicons name="map" size={20} color={theme.colors.primary.main} />
+          <Text style={styles.mapButtonText}>Map View</Text>
+        </TouchableOpacity>
+        {/* Show count of GPS-tagged entries */}
+        {history.filter(item => item.latitude && item.longitude).length > 0 && (
+          <View style={styles.gpsCountBadge}>
+            <Ionicons name="location" size={12} color={theme.colors.success} />
+            <Text style={styles.gpsCountText}>
+              {history.filter(item => item.latitude && item.longitude).length} with GPS
+            </Text>
+          </View>
+        )}
+      </View>
+
       {/* Statistics Dashboard */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
@@ -214,6 +242,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.primary || '#FFFFFF',
+  },
+  // View Toggle Bar
+  viewToggleBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: theme.colors.background.paper,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.divider,
+  },
+  mapButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    paddingVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.primary.light + '20',
+  },
+  mapButtonText: {
+    fontSize: 14,
+    fontFamily: theme.fonts.semiBold,
+    color: theme.colors.primary.main,
+  },
+  gpsCountBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 4,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: theme.borderRadius.sm,
+    backgroundColor: theme.colors.success + '15',
+  },
+  gpsCountText: {
+    fontSize: 11,
+    fontFamily: theme.fonts.medium,
+    color: theme.colors.success,
   },
   // Statistics Dashboard
   statsContainer: {

@@ -20,6 +20,7 @@ import CameraScreen from '../screens/CameraScreen';
 import AudioRecordingScreen from '../screens/AudioRecordingScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import AudioResultsScreen from '../screens/AudioResultsScreen';
+import MapViewScreen from '../screens/MapViewScreen';
 import PaywallScreen from '../screens/PaywallScreen';
 import SpeciesDetailScreen from '../screens/SpeciesDetailScreen';
 
@@ -184,6 +185,16 @@ export default function RootNavigator() {
           <Stack.Screen
             name="SpeciesDetail"
             component={SpeciesDetailScreen}
+            options={{
+              headerShown: false,
+              presentation: 'card',
+            }}
+          />
+
+          {/* Map View (accessed from History) */}
+          <Stack.Screen
+            name="MapView"
+            component={MapViewScreen}
             options={{
               headerShown: false,
               presentation: 'card',

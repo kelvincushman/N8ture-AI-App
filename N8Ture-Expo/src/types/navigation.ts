@@ -57,6 +57,7 @@ export type RootStackParamList = {
     longitude?: number;      // GPS longitude where species was found
     accuracy?: number;       // GPS accuracy in meters
   };
+  MapView: undefined;        // Map view of all GPS-tagged identifications
 
   // Walk screens
   WalkSession: {
